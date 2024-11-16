@@ -62,7 +62,7 @@ class Base(ABC):
                 total_tokens += 1
                 if resp.choices[0].finish_reason == "length":
                     ans += "...\nFor the content length reason, it stopped, continue?" if is_english(
-                        [ans]) else "······\n由于长度的原因，回答被截断了，要继续吗？"
+                        [ans]) else "······\n由于长度的原因，回答被截断了，要继续吗.？"
                 yield ans
 
         except openai.APIError as e:

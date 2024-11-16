@@ -154,22 +154,12 @@ def completion():
                                            ensure_ascii=False) + "\n\n"
             yield "data:"+json.dumps({"retcode": 0, "retmsg": "", "data": True}, ensure_ascii=False) + "\n\n"
 
-        if req.get("stream", True):
-            resp = Response(stream(), mimetype="text/event-stream")
-            resp.headers.add_header("Cache-control", "no-cache")
-            resp.headers.add_header("Connection", "keep-alive")
-            resp.headers.add_header("X-Accel-Buffering", "no")
-            resp.headers.add_header("Content-Type", "text/event-stream; charset=utf-8")
-            return resp
-
-        else:
-            answer = None
-            for ans in chat(dia, msg, **req):
-                answer = ans
-                fillin_conv(ans)
-                ConversationService.update_by_id(conv.id, conv.to_dict())
-                break
-            return get_json_result(data=answer)
+        answer = None
+        for ans in chat(dia, msg, **req):
+            answer = ans
+            fillin_conv(ans)
+            ConversationService.update_by_id(conv.id, conv.to_dict())
+        return get_json_result(data=answer)
     except Exception as e:
         return server_error_response(e)
 
